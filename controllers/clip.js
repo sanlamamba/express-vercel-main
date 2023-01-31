@@ -96,24 +96,18 @@ const deleteVideo = async (req, res, next) => {
 };
 
 const getAllClips = async (req, res, next) => {
-  await ErrorWithin(
-    async () => {
-      try {
-        const clips = await Clip.find({});
-        res.status(200).json({
-          message: "Clips fetched successfully",
-          data: clips,
-        });
-      } catch (err) {
-        res.status(500).json({
-          message: "Error fetching clips",
-          error: err,
-        });
-      }
-    },
-    res,
-    7000
-  );
+  try {
+    const clips = await Clip.find({});
+    res.status(200).json({
+      message: "Clips fetched successfully",
+      data: clips,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching clips",
+      error: err,
+    });
+  }
 };
 
 const getClip = async (req, res, next) => {
