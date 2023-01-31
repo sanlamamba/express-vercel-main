@@ -19,7 +19,7 @@ mongoose
       useUnifiedTopology: true,
     }
   )
-  .set("strictQuery", true)
+  // .set("strictQuery", true)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
@@ -40,7 +40,7 @@ app.use("/public", express.static("./public"));
 app.use("/test", (req, res) => {
   res.send({
     passed: true,
-    version: 2,
+    version: 4,
   });
 });
 
