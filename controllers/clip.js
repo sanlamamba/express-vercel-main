@@ -1,3 +1,4 @@
+const ErrorWithin = require("../middlewares/ErrorWithin");
 const Clip = require("../models/clip");
 const transporter = require("../utils/nodemailer/transporter");
 const fs = require("fs");
@@ -95,18 +96,24 @@ const deleteVideo = async (req, res, next) => {
 };
 
 const getAllClips = async (req, res, next) => {
-  try {
-    const clips = await Clip.find({});
-    res.status(200).json({
-      message: "Clips fetched successfully",
-      data: clips,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: "Error fetching clips",
-      error: err,
-    });
-  }
+  await ErrorWithin(
+    async () => {
+      try {
+        const clips = await Clip.find({});
+        res.status(200).json({
+          message: "Clips fetched successfully",
+          data: clips,
+        });
+      } catch (err) {
+        res.status(500).json({
+          message: "Error fetching clips",
+          error: err,
+        });
+      }
+    },
+    res,
+    7000
+  );
 };
 
 const getClip = async (req, res, next) => {
