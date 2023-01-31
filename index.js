@@ -38,7 +38,10 @@ app.use(morgan("dev"));
 app.use("/public", express.static("./public"));
 // test route
 app.use("/test", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/index.html"));
+  res.send({
+    passed: true,
+    version: 2,
+  });
 });
 
 fs.readdirSync("./routes").map((file) => {
