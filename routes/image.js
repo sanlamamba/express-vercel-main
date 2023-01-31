@@ -1,7 +1,7 @@
 const express = require("express");
-const fileManager = require("../utils/fileManager");
-const multerConfig = require("../utils/multer/multer");
+const fileManager = require("../utils/fileManager/index");
 
+const multerConfig = require("../utils/multer/multerConfig");
 const { imageRemover, videoRemover, fileRemover } = fileManager;
 
 const ENDPOINT = "image";

@@ -1,7 +1,7 @@
 const Image = require("../models/image");
 const slugify = require("slugify");
 
-export const uploadImage = async (req, res, next) => {
+const uploadImage = async (req, res, next) => {
   try {
     const image = req.file;
     console.log(image);
@@ -22,7 +22,7 @@ export const uploadImage = async (req, res, next) => {
   }
 };
 
-export const getImages = async (req, res, next) => {
+const getImages = async (req, res, next) => {
   try {
     const images = await Image.find();
     images.sort((a, b) => b.createdAt - a.createdAt);
@@ -39,7 +39,7 @@ export const getImages = async (req, res, next) => {
   }
 };
 
-export const createCourse = async (req, res, next) => {
+const createCourse = async (req, res, next) => {
   // try {
   const alreadyExists = await Course.findOne({
     slug: slugify(req.body.title, { lower: true }),
@@ -61,7 +61,7 @@ export const createCourse = async (req, res, next) => {
   });
 };
 
-export const viewCourse = async (req, res, next) => {
+const viewCourse = async (req, res, next) => {
   try {
     const course = await Course.findOne({ slug: req.body.slug })
       .populate("instructor", "_id name")
@@ -82,8 +82,14 @@ export const viewCourse = async (req, res, next) => {
     });
   }
 };
-
-export const removeImage = async (req, res, next) => {
+module.exports = {
+  uploadImage,
+  getImages,
+  createCourse,
+  viewCourse,
+  removeImage,
+};
+const removeImage = async (req, res, next) => {
   try {
     const imageId = req.params.id;
     // console.log(`Removing ${imageId}`);
@@ -100,7 +106,7 @@ export const removeImage = async (req, res, next) => {
   }
 };
 
-export const uploadVideo = async (req, res, next) => {
+const uploadVideo = async (req, res, next) => {
   try {
     const video = req.file;
     res.status(200).json({
@@ -115,7 +121,7 @@ export const uploadVideo = async (req, res, next) => {
   }
 };
 
-export const removeVideo = async (req, res, next) => {
+const removeVideo = async (req, res, next) => {
   try {
     res.status(200).json({
       message: "Video deleted successfully",
@@ -195,164 +201,12 @@ export const removeVideo = async (req, res, next) => {
 //   }
 // };
 
-export const updateCourse = async (req, res, next) => {
-  try {
-    const { slug } = req.params;
-    const {
-      title,
-      description,
-      price,
-      image,
-      video,
-      published = false,
-    } = req.body;
-    console.log(req.body);
-    const course = await Course.findOneAndUpdate(
-      { slug },
-      {
-        $set: {
-          title,
-          description,
-          price,
-          image,
-          video,
-          published,
-        },
-      },
-      { new: true }
-    ).exec();
-    if (!course) {
-      return res.status(400).json({
-        message: "Course not found",
-      });
-    }
-    res.status(200).json({
-      message: "Course updated successfully",
-      course,
-    });
-  } catch (e) {
-    res.status(500).json({
-      message: "Error updating course.",
-      error: e,
-    });
-  }
-};
-
-// LESSONS
-
-export const createLesson = async (req, res, next) => {
-  // try {
-  // console.log(req.body.content);
-  const { slug } = req.params;
-  const { title, video, content } = req.body;
-  const courseContent = await Course.findOne({ slug: slug }).exec();
-  if (!courseContent) {
-    return res.status(400).json({
-      message: "Course not found",
-    });
-  }
-  const instructor = await User.findOne({ _id: courseContent.instructor });
-  if (!instructor) {
-    return res.status(400).json({
-      message: "Instructor not found",
-    });
-  }
-  const checkLessonExists = await Course.findOne({
-    slug:
-      instructor._id +
-      "-" +
-      courseContent.title +
-      "-" +
-      slugify(title, { lower: true }),
-  }).exec();
-  if (checkLessonExists) {
-    // replace lesson
-    const course = await Course.findOneAndUpdate(
-      {
-        slug:
-          instructor._id +
-          "-" +
-          courseContent.title +
-          "-" +
-          slugify(title, { lower: true }),
-      },
-      {
-        $set: {
-          title,
-          video,
-          content,
-        },
-      },
-      { new: true }
-    ).exec();
-    if (!course) {
-      return res.status(400).json({
-        message: "Course not found",
-      });
-    }
-
-    res.status(200).json({
-      message: "Lesson updated successfully",
-      course,
-      // courseContent,
-    });
-  } else {
-    // create lesson
-    const course = await Course.findOneAndUpdate(
-      { slug },
-      {
-        $push: {
-          lessons: {
-            title,
-            video,
-            content,
-            slug:
-              instructor._id +
-              "-" +
-              courseContent.title +
-              "-" +
-              slugify(title, { lower: true }),
-          },
-        },
-      },
-      { new: true }
-    ).exec();
-    if (!course) {
-      return res.status(400).json({
-        message: "Course not found",
-      });
-    }
-
-    res.status(200).json({
-      message: "Lesson created successfully",
-      course,
-      // courseContent,
-    });
-  }
-
-  // const lesson = await new Lesson({
-  //   title,
-  //   video,
-  //   content,
-  //   slug:
-  //     instructor._id +
-  //     "-" +
-  //     courseContent.title +
-  //     "-" +
-  //     slugify(title, { lower: true }),
-  // }).save();
-  // // save created lesson to course.lesson array
-  // courseContent.lessons.push(lesson._id);
-  // const updatedCourse = await courseContent.save();
-
-  // res.status(200).json({
-  //   message: "Lesson created successfully",
-  //   updatedCourse,
-  // });
-  // } catch (e) {
-  //   res.status(500).json({
-  //     message: "Error creating lesson.",
-  //     error: e,
-  //   });
-  // }
+module.exports = {
+  uploadImage,
+  getImages,
+  createCourse,
+  viewCourse,
+  removeImage,
+  uploadVideo,
+  removeVideo,
 };

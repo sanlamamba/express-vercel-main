@@ -2,7 +2,7 @@ const Message = require("../models/message");
 const newMessageTemplates = require("../utils/nodemailer/template/newMessage");
 const transporter = require("../utils/nodemailer/transporter");
 
-export const newMessage = async (req, res, next) => {
+const newMessage = async (req, res, next) => {
   try {
     const message = new Message(req.body);
     const savedMessage = await message.save();
@@ -42,7 +42,7 @@ export const newMessage = async (req, res, next) => {
   }
 };
 
-export const testMail = async (req, res, next) => {
+const testMail = async (req, res, next) => {
   const { from, toEmail, subject, message } = req.body;
   console.log(from, toEmail, subject, message);
   try {
@@ -66,7 +66,7 @@ export const testMail = async (req, res, next) => {
   }
 };
 
-export const getMessages = async (req, res, next) => {
+const getMessages = async (req, res, next) => {
   try {
     const messages = await Message.find();
     res.status(200).json({
@@ -81,7 +81,7 @@ export const getMessages = async (req, res, next) => {
   }
 };
 
-export const getNewMessages = async (req, res, next) => {
+const getNewMessages = async (req, res, next) => {
   try {
     const messages = await Message.find({ isRead: false });
     res.status(200).json({
@@ -96,7 +96,7 @@ export const getNewMessages = async (req, res, next) => {
   }
 };
 
-export const getMessagesByEmail = async (req, res, next) => {
+const getMessagesByEmail = async (req, res, next) => {
   try {
     const messages = await Message.find({ email: req.params.email });
     res.status(200).json({
@@ -111,7 +111,7 @@ export const getMessagesByEmail = async (req, res, next) => {
   }
 };
 
-export const setMessageReadByID = async (req, res, next) => {
+const setMessageReadByID = async (req, res, next) => {
   try {
     const message = await Message.findOneAndUpdate(
       {
@@ -136,7 +136,7 @@ export const setMessageReadByID = async (req, res, next) => {
   }
 };
 
-export const countUnreadMessages = async (req, res, next) => {
+const countUnreadMessages = async (req, res, next) => {
   try {
     // find the count of messages with read value as false
     Message.countDocuments({ read: false }).exec((err, count) => {
@@ -156,4 +156,14 @@ export const countUnreadMessages = async (req, res, next) => {
       data: e,
     });
   }
+};
+
+module.exports = {
+  newMessage,
+  testMail,
+  getMessages,
+  getNewMessages,
+  getMessagesByEmail,
+  setMessageReadByID,
+  countUnreadMessages,
 };
