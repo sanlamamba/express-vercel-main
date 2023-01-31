@@ -1,4 +1,4 @@
-const expres = require("express");
+const express = require("express");
 const fileManager = require("../utils/fileManager");
 const multerConfig = require("../utils/multer/multerConfig");
 const { musicRemover, videoRemover, fileRemover } = fileManager;

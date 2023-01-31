@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-export const imageSchema = new Schema(
+const imageSchema = new Schema(
   {
     path: {
       type: String,

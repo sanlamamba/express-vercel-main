@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-export const MusicSchema = new Schema(
+const MusicSchema = new Schema(
   {
     title: {
       type: String,

@@ -82,13 +82,7 @@ const viewCourse = async (req, res, next) => {
     });
   }
 };
-module.exports = {
-  uploadImage,
-  getImages,
-  createCourse,
-  viewCourse,
-  removeImage,
-};
+
 const removeImage = async (req, res, next) => {
   try {
     const imageId = req.params.id;
