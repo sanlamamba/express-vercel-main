@@ -19,6 +19,7 @@ mongoose
       useUnifiedTopology: true,
     }
   )
+  .set("strictQuery", true)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
