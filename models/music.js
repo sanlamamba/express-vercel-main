@@ -29,4 +29,4 @@ export const MusicSchema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Music", MusicSchema);
+module.exports = mongoose.model("Music", MusicSchema);
